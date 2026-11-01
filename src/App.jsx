@@ -71,6 +71,56 @@ function LinkButton({ href, className, children }) {
   )
 }
 
+const NAV = [
+  ['vision', 'Vision'],
+  ['commitments', 'Commitments'],
+  ['spotlight', 'Spotlight'],
+  ['where', 'Where to go'],
+]
+
+// Sticky nav: section links (current one highlighted), a vote button, and a menu on phones
+function Nav({ voting }) {
+  const [open, setOpen] = useState(false)
+  const [active, setActive] = useState('')
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
+      { rootMargin: '-45% 0px -50% 0px' }
+    )
+    ;[...NAV.map(([id]) => id), 'vote'].forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+    return () => observer.disconnect()
+  }, [])
+
+  const close = () => setOpen(false)
+
+  return (
+    <header className={`nav ${open ? 'is-open' : ''}`}>
+      <a className="nav-brand" href="#top" onClick={close}>
+        <span className="wm">Carnegie Mellon University Africa</span>
+        <span className="nav-sub">Student Guild Elections 2026</span>
+      </a>
+      <nav className="nav-links" aria-label="Sections">
+        {NAV.map(([id, label]) => (
+          <a key={id} href={`#${id}`} className={active === id ? 'is-active' : ''} onClick={close}>
+            {label}
+          </a>
+        ))}
+      </nav>
+      <a className="nav-vote" href="#vote" onClick={close}>
+        {voting ? 'Vote today' : 'Vote · Sat 14 Nov'}
+      </a>
+      <button type="button" className="nav-toggle" aria-expanded={open} onClick={() => setOpen(!open)}>
+        <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
+        <span className="bars" aria-hidden="true" />
+      </button>
+    </header>
+  )
+}
+
 function Tick() {
   return (
     <svg className="tick" viewBox="0 0 40 40" aria-hidden="true">
@@ -170,15 +220,9 @@ export default function App() {
 
   return (
     <>
-      <header className="nav">
-        <div>
-          <span className="wm">Carnegie Mellon University Africa</span>
-          <span className="nav-sub">Student Guild Elections 2026</span>
-        </div>
-        <span className="nav-days">{voting ? 'Vote today' : 'Vote · Sat 14 Nov'}</span>
-      </header>
+      <Nav voting={voting} />
 
-      <section className="hero">
+      <section id="top" className="hero">
         <div className="hero-copy">
           <p className="label">Candidate for {CANDIDATE.role}</p>
           <h1>
@@ -223,7 +267,7 @@ export default function App() {
         </div>
       </section>
 
-      <section className="vision wrap">
+      <section id="vision" className="vision wrap">
         <p className="label">The vision</p>
         <blockquote>
           Information at CMU-Africa shouldn’t be scattered, late or hard to find. I want a Guild that communicates like a
@@ -231,7 +275,7 @@ export default function App() {
         </blockquote>
       </section>
 
-      <section className="wrap section">
+      <section id="commitments" className="wrap section">
         <p className="label">Three commitments</p>
         <div className="commitments">
           {COMMITMENTS.map((c, i) => (
@@ -258,7 +302,7 @@ export default function App() {
         </div>
       </section>
 
-      <section className="wrap section spot">
+      <section id="spotlight" className="wrap section spot">
         <div>
           <p className="label">Student spotlight</p>
           <h2>No project needed. Just you.</h2>
@@ -288,7 +332,7 @@ export default function App() {
         </ol>
       </section>
 
-      <section className="wrap section where">
+      <section id="where" className="wrap section where">
         <p className="label">Know where to go</p>
         <h2>One link. Every answer.</h2>
         <ul className="dir">
@@ -301,7 +345,7 @@ export default function App() {
         </ul>
       </section>
 
-      <section className="final">
+      <section id="vote" className="final">
         <div className="final-inner">
           <p className="final-kicker">Saturday 14 November</p>
           <h2>Tick the box for clear communication.</h2>

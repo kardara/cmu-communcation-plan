@@ -286,6 +286,82 @@ h2 {
   margin-top: -2px;
 }
 
+/* ---------- Remind me ---------- */
+.remind {
+  position: relative;
+}
+
+.remind > .btn {
+  color: #fff;
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.remind > .btn:hover {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.remind-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 280px;
+  padding: 14px;
+  text-align: left;
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--ink);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+}
+
+.remind-menu p {
+  margin-bottom: 10px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.remind-menu a,
+.remind-menu button {
+  display: block;
+  width: 100%;
+  padding: 12px 0;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+  color: var(--ink);
+  background: none;
+  border: none;
+  border-top: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.remind-menu a:hover,
+.remind-menu button:hover {
+  color: var(--red);
+}
+
+.remind-light > .btn {
+  color: var(--ink);
+  background: #fff;
+  border-color: #fff;
+}
+
+.final-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.final-actions .remind-menu {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 /* ---------- Ballot ---------- */
 .ballot {
   background: #fff;
@@ -606,6 +682,12 @@ h2 {
   .hero-visual .ballot {
     width: 100%;
     max-width: 320px;
+  }
+  .actions > .remind {
+    flex: 1;
+  }
+  .actions .remind > .btn {
+    width: 100%;
   }
   .actions .btn {
     flex: 1;

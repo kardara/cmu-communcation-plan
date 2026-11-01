@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BOOKING_URL, CANDIDATE, SPOTLIGHT_FORM_URL, daysToVote } from './config.js'
+import { downloadIcs, googleCalendarUrl } from './calendar.js'
 import { shareStatusImage } from './statusImage.js'
 
 const COMMITMENTS = [
@@ -67,6 +68,43 @@ function Ballot({ big = false }) {
   )
 }
 
+// "Remind me to vote": Google Calendar link or a calendar file with two reminders
+function RemindMe({ light = false }) {
+  const [open, setOpen] = useState(false)
+  useEffect(() => {
+    if (!open) return
+    const close = (e) => !e.target.closest('.remind') && setOpen(false)
+    document.addEventListener('click', close)
+    return () => document.removeEventListener('click', close)
+  }, [open])
+
+  return (
+    <div className={`remind ${light ? 'remind-light' : ''}`}>
+      <button type="button" className="btn btn-line" aria-expanded={open} onClick={() => setOpen(!open)}>
+        Remind me to vote
+      </button>
+      {open && (
+        <div className="remind-menu" role="menu">
+          <p>We’ll remind you the evening before and on voting morning.</p>
+          <a role="menuitem" href={googleCalendarUrl()} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
+            Google Calendar
+          </a>
+          <button
+            type="button"
+            role="menuitem"
+            onClick={() => {
+              downloadIcs()
+              setOpen(false)
+            }}
+          >
+            Apple / Outlook calendar
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
 function useDays() {
   const [days, setDays] = useState(() => daysToVote())
   useEffect(() => {
@@ -122,9 +160,7 @@ export default function App() {
           </div>
 
           <div className="actions">
-            <a className="btn btn-red" href={SPOTLIGHT_FORM_URL} target="_blank" rel="noreferrer">
-              Get featured
-            </a>
+            <RemindMe />
             <button type="button" className="btn btn-line" onClick={postToStatus} disabled={making}>
               {making ? 'Preparing…' : 'Post to status'}
             </button>
@@ -224,6 +260,9 @@ export default function App() {
           <p className="final-kicker">Saturday 14 November</p>
           <h2>Tick the box for clear communication.</h2>
           <Ballot big />
+          <div className="final-actions">
+            <RemindMe light />
+          </div>
           <p className="final-tag">{CANDIDATE.hashtag}</p>
         </div>
       </section>

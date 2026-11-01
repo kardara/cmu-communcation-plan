@@ -171,34 +171,58 @@ h2 {
   color: var(--ink);
 }
 
-.days {
-  display: flex;
-  align-items: center;
-  gap: 18px;
+.counter {
   margin-top: 36px;
 }
 
-.days-num {
-  font-size: clamp(3.4rem, 6vw, 5rem);
+.counter-units {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(10px, 1.6vw, 20px);
+  max-width: 480px;
+}
+
+.counter-units div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 3px solid var(--ink);
+}
+
+.counter-units div:first-child {
+  border-top-color: var(--red);
+}
+
+.counter-units span {
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
   font-weight: 800;
   line-height: 1;
-  letter-spacing: -0.05em;
-  color: var(--red);
+  letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
 }
 
-.days-text {
-  display: flex;
-  flex-direction: column;
-  padding-left: 18px;
-  font-size: 1.15rem;
-  font-weight: 800;
-  border-left: 2px solid var(--line);
+.counter-units div:first-child span {
+  color: var(--red);
 }
 
-.days-text small {
-  margin-top: 2px;
-  font-size: 0.85rem;
+.counter-units small {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.counter-open {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: var(--red);
+}
+
+.counter-note {
+  margin-top: 12px;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--ink-soft);
 }

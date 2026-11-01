@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BOOKING_URL, CANDIDATE, SPOTLIGHT_FORM_URL, daysToVote } from './config.js'
+import { BOOKING_URL, CANDIDATE, SPOTLIGHT_FORM_URL, VOTE_START, daysToVote } from './config.js'
 import { downloadIcs, googleCalendarUrl } from './calendar.js'
 import { shareStatusImage } from './statusImage.js'
 
@@ -105,17 +105,28 @@ function RemindMe({ light = false }) {
   )
 }
 
-function useDays() {
-  const [days, setDays] = useState(() => daysToVote())
+function useNow() {
+  const [now, setNow] = useState(() => new Date())
   useEffect(() => {
-    const id = setInterval(() => setDays(daysToVote()), 60000)
+    const id = setInterval(() => setNow(new Date()), 1000)
     return () => clearInterval(id)
   }, [])
-  return days
+  return now
+}
+
+function timeLeft(now) {
+  const diff = Math.max(0, VOTE_START - now)
+  return [
+    [Math.floor(diff / 86400000), 'Days'],
+    [Math.floor((diff / 3600000) % 24), 'Hours'],
+    [Math.floor((diff / 60000) % 60), 'Minutes'],
+    [Math.floor((diff / 1000) % 60), 'Seconds'],
+  ]
 }
 
 export default function App() {
-  const days = useDays()
+  const now = useNow()
+  const voting = now >= VOTE_START
   const [making, setMaking] = useState(false)
 
   const postToStatus = async () => {
@@ -127,8 +138,6 @@ export default function App() {
     }
   }
 
-  const daysLabel = days === 0 ? 'Voting is today' : `${days} ${days === 1 ? 'day' : 'days'} to vote`
-
   return (
     <>
       <header className="nav">
@@ -136,7 +145,7 @@ export default function App() {
           <span className="wm">Carnegie Mellon University Africa</span>
           <span className="nav-sub">Student Guild Elections 2026</span>
         </div>
-        <span className="nav-days">{daysLabel}</span>
+        <span className="nav-days">{voting ? 'Vote today' : 'Vote · Sat 14 Nov'}</span>
       </header>
 
       <section className="hero">
@@ -151,12 +160,20 @@ export default function App() {
             Vote <strong>{CANDIDATE.name}</strong> for {CANDIDATE.role}: a Guild that speaks to every student, every week.
           </p>
 
-          <div className="days">
-            <span className="days-num">{days === 0 ? 'Today' : days}</span>
-            <span className="days-text">
-              {days === 0 ? 'Voting is open' : days === 1 ? 'day to vote' : 'days to vote'}
-              <small>Saturday 14 November</small>
-            </span>
+          <div className="counter" aria-live="polite">
+            {voting ? (
+              <p className="counter-open">Voting is open today</p>
+            ) : (
+              <div className="counter-units">
+                {timeLeft(now).map(([value, label]) => (
+                  <div key={label}>
+                    <span>{String(value).padStart(2, '0')}</span>
+                    <small>{label}</small>
+                  </div>
+                ))}
+              </div>
+            )}
+            <p className="counter-note">Voting day · Saturday 14 November</p>
           </div>
 
           <div className="actions">

@@ -16,6 +16,9 @@ export const CANDIDATE = {
   hashtag: '#VoteAbdoulaz',
 }
 
+// Start of voting day in Kigali; the web counter runs down to this moment
+export const VOTE_START = new Date(`${VOTE_DATE}T00:00:00+02:00`)
+
 // Whole days from today (in Kigali) until voting day; 0 on the day itself
 export function daysToVote(now = new Date()) {
   const today = now.toLocaleDateString('en-CA', { timeZone: 'Africa/Kigali' })

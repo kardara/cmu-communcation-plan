@@ -1,13 +1,13 @@
 import { CANDIDATE } from './config.js'
 
-// Draws a 1080x1920 (9:16) status image styled as a ballot paper.
-// Key content sits between y≈150 and y≈1780, clear of WhatsApp's status overlays.
+// Draws a 1080x1920 (9:16) status image: tartan header, portrait, the number of days
+// left to vote, and a ticked ballot. Content sits between y≈140 and y≈1790,
+// clear of WhatsApp's status overlays.
 const W = 1080
 const H = 1920
 const RED = '#c41230'
 const INK = '#111111'
 const SOFT = '#6b6b6b'
-const LINE = '#e2ded8'
 const PAD = 90
 
 function loadImage(src) {
@@ -27,16 +27,23 @@ function text(ctx, value, x, y, font, color, spacing = 0) {
   ctx.letterSpacing = '0px'
 }
 
-// Portrait in an arch: a semicircle on top of a rectangle
-function drawArchPhoto(ctx, img, x, y, w, h) {
+function archPath(ctx, x, y, w, h) {
   const r = w / 2
-  ctx.save()
   ctx.beginPath()
   ctx.moveTo(x, y + h)
   ctx.lineTo(x, y + r)
   ctx.arc(x + r, y + r, r, Math.PI, 0)
   ctx.lineTo(x + w, y + h)
   ctx.closePath()
+}
+
+function drawPortrait(ctx, img, x, y, w, h) {
+  const border = 14
+  ctx.fillStyle = '#fff'
+  archPath(ctx, x - border, y - border, w + border * 2, h + border)
+  ctx.fill()
+  ctx.save()
+  archPath(ctx, x, y, w, h)
   ctx.clip()
   const scale = Math.max(w / img.width, h / img.height)
   const sw = w / scale
@@ -47,21 +54,21 @@ function drawArchPhoto(ctx, img, x, y, w, h) {
 
 function drawTick(ctx, x, y, size) {
   ctx.strokeStyle = RED
-  ctx.lineWidth = 4
+  ctx.lineWidth = 5
   ctx.strokeRect(x, y, size, size)
-  ctx.lineWidth = 9
+  ctx.lineWidth = 10
   ctx.lineCap = 'round'
   ctx.lineJoin = 'round'
   ctx.beginPath()
-  ctx.moveTo(x + size * 0.2, y + size * 0.52)
-  ctx.lineTo(x + size * 0.42, y + size * 0.74)
-  ctx.lineTo(x + size * 0.84, y + size * 0.24)
+  ctx.moveTo(x + size * 0.22, y + size * 0.52)
+  ctx.lineTo(x + size * 0.42, y + size * 0.72)
+  ctx.lineTo(x + size * 0.8, y + size * 0.28)
   ctx.stroke()
 }
 
-export async function createStatusImage(timeLeft, voting = false) {
+export async function createStatusImage(days) {
   await document.fonts.ready
-  const photo = await loadImage('/candidate.jpg')
+  const [photo, tartan] = await Promise.all([loadImage('/candidate.jpg'), loadImage('/tartan.svg')])
 
   const canvas = document.createElement('canvas')
   canvas.width = W
@@ -70,81 +77,63 @@ export async function createStatusImage(timeLeft, voting = false) {
 
   ctx.fillStyle = '#fff'
   ctx.fillRect(0, 0, W, H)
-  ctx.fillStyle = RED
-  ctx.fillRect(0, 0, W, 14)
 
-  // Header
-  text(ctx, 'Carnegie Mellon University Africa', PAD, 170, '600 42px "Source Serif 4", serif', RED)
-  text(ctx, 'STUDENT GUILD ELECTIONS 2026', PAD, 222, '700 22px "Open Sans", sans-serif', SOFT, 6)
+  // Tartan header
+  const tile = document.createElement('canvas')
+  tile.width = 200
+  tile.height = 200
+  tile.getContext('2d').drawImage(tartan, 0, 0, 200, 200)
+  ctx.fillStyle = ctx.createPattern(tile, 'repeat')
+  ctx.fillRect(0, 0, W, 760)
+  ctx.fillRect(0, H - 34, W, 34)
 
-  // Portrait
-  const pw = 560
-  const ph = 700
-  drawArchPhoto(ctx, photo, (W - pw) / 2, 290, pw, ph)
+  ctx.textAlign = 'center'
+  text(ctx, 'Carnegie Mellon University Africa', W / 2, 160, '600 46px "Source Serif 4", serif', '#fff')
+  text(ctx, 'STUDENT GUILD ELECTIONS 2026', W / 2, 214, '700 22px "Open Sans", sans-serif', 'rgba(255,255,255,0.8)', 6)
 
-  // Ballot card
-  const cardX = PAD
-  const cardY = 1060
-  const cardW = W - PAD * 2
-  const cardH = 330
-  ctx.fillStyle = '#fff'
-  ctx.fillRect(cardX, cardY - 40, cardW, cardH + 40)
+  // Portrait sitting on the edge of the tartan
+  drawPortrait(ctx, photo, (W - 420) / 2, 290, 420, 520)
+
+  // Days to vote
+  if (days > 0) {
+    text(ctx, String(days), W / 2, 1180, '800 330px "Open Sans", sans-serif', RED, -14)
+    text(ctx, days === 1 ? 'DAY TO VOTE' : 'DAYS TO VOTE', W / 2 + 8, 1262, '800 44px "Open Sans", sans-serif', INK, 12)
+  } else {
+    text(ctx, 'Today', W / 2, 1140, '800 230px "Open Sans", sans-serif', RED, -8)
+    text(ctx, 'VOTING IS OPEN', W / 2 + 8, 1232, '800 44px "Open Sans", sans-serif', INK, 12)
+  }
+  text(ctx, 'Saturday 14 November', W / 2, 1318, '600 34px "Open Sans", sans-serif', SOFT)
+  ctx.textAlign = 'left'
+
+  // Ballot
+  const bx = PAD
+  const by = 1400
+  const bw = W - PAD * 2
+  const bh = 300
   ctx.strokeStyle = INK
   ctx.lineWidth = 3
-  ctx.strokeRect(cardX, cardY, cardW, cardH)
+  ctx.strokeRect(bx, by, bw, bh)
   ctx.fillStyle = INK
-  ctx.fillRect(cardX, cardY, cardW, 70)
-  text(ctx, 'BALLOT', cardX + 34, cardY + 46, '800 24px "Open Sans", sans-serif', '#fff', 8)
+  ctx.fillRect(bx, by, bw, 68)
+  text(ctx, 'BALLOT', bx + 32, by + 44, '800 24px "Open Sans", sans-serif', '#fff', 8)
   ctx.textAlign = 'right'
-  text(ctx, 'COMMUNICATIONS MINISTER', cardX + cardW - 34, cardY + 46, '700 22px "Open Sans", sans-serif', '#fff', 4)
+  text(ctx, 'COMMUNICATIONS MINISTER', bx + bw - 32, by + 44, '700 22px "Open Sans", sans-serif', '#fff', 4)
   ctx.textAlign = 'left'
+  drawTick(ctx, bx + 36, by + 116, 100)
+  text(ctx, 'Abdoulaye Zakaria', bx + 168, by + 152, '800 52px "Open Sans", sans-serif', INK, -1)
+  text(ctx, 'Djerou', bx + 168, by + 210, '800 52px "Open Sans", sans-serif', INK, -1)
+  text(ctx, CANDIDATE.tagline, bx + 168, by + 262, 'italic 400 34px "Source Serif 4", serif', RED)
 
-  drawTick(ctx, cardX + 40, cardY + 120, 96)
-  text(ctx, 'Abdoulaye Zakaria', cardX + 170, cardY + 158, '800 54px "Open Sans", sans-serif', INK, -1)
-  text(ctx, 'Djerou', cardX + 170, cardY + 218, '800 54px "Open Sans", sans-serif', INK, -1)
-  text(ctx, CANDIDATE.tagline, cardX + 170, cardY + 280, 'italic 400 34px "Source Serif 4", serif', RED)
-
-  // Countdown
-  if (voting) {
-    ctx.textAlign = 'center'
-    text(ctx, 'Voting is open today', W / 2, 1530, '800 64px "Open Sans", sans-serif', RED, -1)
-    ctx.textAlign = 'left'
-  } else {
-    const units = [
-      [timeLeft.days, timeLeft.days === 1 ? 'day' : 'days'],
-      [timeLeft.hours, timeLeft.hours === 1 ? 'hour' : 'hours'],
-      [timeLeft.minutes, 'min'],
-    ]
-    const colW = (W - PAD * 2) / 3
-    units.forEach(([value, label], i) => {
-      const x = PAD + i * colW
-      text(ctx, String(value).padStart(2, '0'), x, 1560, '800 104px "Open Sans", sans-serif', INK, -4)
-      ctx.font = '800 104px "Open Sans", sans-serif'
-      ctx.letterSpacing = '-4px'
-      const w = ctx.measureText(String(value).padStart(2, '0')).width
-      ctx.letterSpacing = '0px'
-      text(ctx, label, x + w + 10, 1560, '600 30px "Open Sans", sans-serif', SOFT)
-    })
-    text(ctx, 'until voting opens on Saturday 14 November', PAD, 1620, '400 30px "Open Sans", sans-serif', SOFT)
-  }
-
-  // Footer
-  ctx.fillStyle = LINE
-  ctx.fillRect(PAD, 1680, W - PAD * 2, 2)
-  text(ctx, 'VOTE SAT 14 NOV', PAD, 1752, '800 30px "Open Sans", sans-serif', INK, 4)
-  ctx.textAlign = 'right'
-  text(ctx, CANDIDATE.hashtag, W - PAD, 1752, '800 38px "Open Sans", sans-serif', RED)
+  ctx.textAlign = 'center'
+  text(ctx, CANDIDATE.hashtag, W / 2, 1790, '800 46px "Open Sans", sans-serif', RED)
   ctx.textAlign = 'left'
-
-  ctx.fillStyle = RED
-  ctx.fillRect(0, H - 14, W, 14)
 
   return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'))
 }
 
 // Opens the share sheet with the image on phones; downloads it elsewhere.
-export async function shareStatusImage(timeLeft, voting) {
-  const blob = await createStatusImage(timeLeft, voting)
+export async function shareStatusImage(days) {
+  const blob = await createStatusImage(days)
   const file = new File([blob], 'vote-abdoulaz-status.png', { type: 'image/png' })
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try {

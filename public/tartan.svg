@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+  <!-- A Carnegie-inspired tartan sett: navy ground, green and red bands, gold and blue overchecks -->
+  <rect width="160" height="160" fill="#16203a"/>
+  <g opacity="0.55">
+    <rect x="0" y="0" width="160" height="40" fill="#1e5a43"/>
+    <rect x="0" y="96" width="160" height="22" fill="#a51027"/>
+    <rect x="0" y="62" width="160" height="3" fill="#e0a526"/>
+    <rect x="0" y="136" width="160" height="2" fill="#3d7fd1"/>
+    <rect x="0" y="18" width="160" height="2" fill="#0b1124"/>
+  </g>
+  <g opacity="0.55">
+    <rect x="0" y="0" width="40" height="160" fill="#1e5a43"/>
+    <rect x="96" y="0" width="22" height="160" fill="#a51027"/>
+    <rect x="62" y="0" width="3" height="160" fill="#e0a526"/>
+    <rect x="136" y="0" width="2" height="160" fill="#3d7fd1"/>
+    <rect x="18" y="0" width="2" height="160" fill="#0b1124"/>
+  </g>
+</svg>

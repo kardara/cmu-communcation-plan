@@ -3,8 +3,8 @@
 Campaign site for **Abdoulaye Zakaria Djerou**, candidate for Communications Minister,
 CMU-Africa Student Guild Elections 2026. Vote: **14 November 2026**.
 
-- Countdown to voting day, the three commitments, weekly rhythm, Student Spotlight, "where to go" guide
-- **Post to status**: 1080×1920 image with a live countdown for WhatsApp / Instagram status
+- Days to vote, the vision, three commitments, weekly rhythm, Student Spotlight, "where to go" guide
+- **Post to status**: 1080×1920 image showing the days left to vote, for WhatsApp / Instagram status
 - Link preview card for WhatsApp / LinkedIn
 
 The full campaign plan is in [PLAN.md](PLAN.md).

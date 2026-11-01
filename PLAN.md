@@ -61,22 +61,22 @@ writes the drafts back into the sheet, ready for review.
 
 ### Drafting brief for Claude
 > You are drafting a Student of the Week post for the CMU-Africa Student Guild.
-> Using the form response below, write: (1) an Instagram caption (≤ 120 words, warm, 3–5 hashtags
+> Using the form response below, write: (1) an Instagram caption (≤ 120 words, warm, 3 to 5 hashtags
 > including #CMUAfrica #StudentOfTheWeek), (2) a LinkedIn post (≤ 150 words, professional, tag-ready),
 > (3) a WhatsApp message (≤ 60 words). Use only facts from the response; do not invent achievements.
 > Mention program, class and country. End with "Want to be featured? [form link]".
 > Response: …
 
-## 4. Campaign timeline (1–14 November)
+## 4. Campaign timeline (1 to 14 November)
 
 | When | What |
 |---|---|
 | **Sun 2 Nov** | Publish the campaign site + flyer. Post on LinkedIn and in WhatsApp groups (with permission). |
 | **Mon 3 Nov** | Launch the Spotlight form as a pilot: "Be among the first featured". |
-| **3–7 Nov** | Short class / lab visits (2 minutes: the three commitments + QR code to the site). |
+| **3 to 7 Nov** | Short class / lab visits (2 minutes: the three commitments + QR code to the site). |
 | **Thu 5 Nov** | Culture Connect: show up, take part, and talk to students. No hard campaigning at a community event. |
-| **8–9 Nov** | Weekend demo: publish one sample "Student of the Week" (with consent) to show the plan working. |
-| **10–12 Nov** | Debates / candidate sessions: lead with the weekly rhythm and the one-link idea. |
+| **8 and 9 Nov** | Weekend demo: publish one sample "Student of the Week" (with consent) to show the plan working. |
+| **10 to 12 Nov** | Debates / candidate sessions: lead with the weekly rhythm and the one-link idea. |
 | **Fri 13 Nov** | Final push: status image with the countdown; personal messages to people you've met. |
 | **Sat 14 Nov** | **Vote.** A thank-you post afterwards, whatever the result. |
 

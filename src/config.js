@@ -5,7 +5,7 @@ export const VOTE_DAY = new Date('2026-11-14T08:00:00+02:00')
 
 // Paste the Google Form link here after running scripts/create-spotlight-form.gs.
 // While empty, the "Get featured" buttons point to the email below instead.
-export const SPOTLIGHT_FORM_URL = ''
+export const SPOTLIGHT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeZOwe0aApBj-8XmfP3yMVDb2Q8sJm2NruQaprpys6N5x096Q/viewform'
 
 // Booking link for project-showcase recordings (e.g. a Google Calendar appointment schedule).
 export const BOOKING_URL = ''
@@ -26,4 +26,4 @@ export const CANDIDATE = {
   },
 }
 
-export const mailtoFeature = `mailto:${CANDIDATE.email}?subject=${encodeURIComponent('Student Spotlight – I want to be featured')}`
+export const mailtoFeature = `mailto:${CANDIDATE.email}?subject=${encodeURIComponent('Student Spotlight: I want to be featured')}`

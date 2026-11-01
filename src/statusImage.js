@@ -1,13 +1,14 @@
 import { CANDIDATE } from './config.js'
 
-// Draws a 1080x1920 (9:16) image sized for WhatsApp / Instagram status.
+// Draws a 1080x1920 (9:16) status image styled as a ballot paper.
 // Key content sits between y≈150 and y≈1780, clear of WhatsApp's status overlays.
 const W = 1080
 const H = 1920
 const RED = '#c41230'
-const DEEP = '#7e0318'
 const INK = '#111111'
-const PAD = 80
+const SOFT = '#6b6b6b'
+const LINE = '#e2ded8'
+const PAD = 90
 
 function loadImage(src) {
   return new Promise((resolve, reject) => {
@@ -26,24 +27,36 @@ function text(ctx, value, x, y, font, color, spacing = 0) {
   ctx.letterSpacing = '0px'
 }
 
-function drawPlaid(ctx, y, h) {
-  ctx.fillStyle = '#14213d'
-  ctx.fillRect(0, y, W, h)
-  const stripes = [
-    [22, 3, 'rgba(196,18,48,0.9)'],
-    [48, 2, 'rgba(30,122,76,0.85)'],
-    [70, 1, 'rgba(224,165,38,0.8)'],
-  ]
-  for (let x0 = 0; x0 < W; x0 += 90) {
-    stripes.forEach(([dx, w, c]) => {
-      ctx.fillStyle = c
-      ctx.fillRect(x0 + dx, y, w * 1.5, h)
-    })
-  }
-  for (let y0 = y; y0 < y + h; y0 += 26) {
-    ctx.fillStyle = 'rgba(59,142,224,0.55)'
-    ctx.fillRect(0, y0 + 8, W, 3)
-  }
+// Portrait in an arch: a semicircle on top of a rectangle
+function drawArchPhoto(ctx, img, x, y, w, h) {
+  const r = w / 2
+  ctx.save()
+  ctx.beginPath()
+  ctx.moveTo(x, y + h)
+  ctx.lineTo(x, y + r)
+  ctx.arc(x + r, y + r, r, Math.PI, 0)
+  ctx.lineTo(x + w, y + h)
+  ctx.closePath()
+  ctx.clip()
+  const scale = Math.max(w / img.width, h / img.height)
+  const sw = w / scale
+  const sh = h / scale
+  ctx.drawImage(img, (img.width - sw) / 2, (img.height - sh) * 0.2, sw, sh, x, y, w, h)
+  ctx.restore()
+}
+
+function drawTick(ctx, x, y, size) {
+  ctx.strokeStyle = RED
+  ctx.lineWidth = 4
+  ctx.strokeRect(x, y, size, size)
+  ctx.lineWidth = 9
+  ctx.lineCap = 'round'
+  ctx.lineJoin = 'round'
+  ctx.beginPath()
+  ctx.moveTo(x + size * 0.2, y + size * 0.52)
+  ctx.lineTo(x + size * 0.42, y + size * 0.74)
+  ctx.lineTo(x + size * 0.84, y + size * 0.24)
+  ctx.stroke()
 }
 
 export async function createStatusImage(timeLeft, voting = false) {
@@ -55,96 +68,76 @@ export async function createStatusImage(timeLeft, voting = false) {
   canvas.height = H
   const ctx = canvas.getContext('2d')
 
-  // Red stage with the photo's own backdrop blended in
-  const bg = ctx.createLinearGradient(0, 0, 0, 1180)
-  bg.addColorStop(0, '#3a0509')
-  bg.addColorStop(0.6, DEEP)
-  bg.addColorStop(1, '#7a0216')
-  ctx.fillStyle = bg
-  ctx.fillRect(0, 0, W, 1180)
-  const glow = ctx.createRadialGradient(700, 520, 40, 700, 520, 560)
-  glow.addColorStop(0, 'rgba(176,4,47,0.9)')
-  glow.addColorStop(1, 'rgba(176,4,47,0)')
-  ctx.fillStyle = glow
-  ctx.fillRect(0, 0, W, 1180)
-
-  // Photo, faded at its edges so its red background melts into the stage
-  const ph = 1000
-  const pw = (photo.width / photo.height) * ph
-  const px = W - pw + 60
-  const py = 1180 - ph
-  const off = document.createElement('canvas')
-  off.width = pw
-  off.height = ph
-  const octx = off.getContext('2d')
-  octx.drawImage(photo, 0, 0, pw, ph)
-  octx.globalCompositeOperation = 'destination-in'
-  const sides = octx.createLinearGradient(0, 0, pw, 0)
-  sides.addColorStop(0, 'rgba(0,0,0,0)')
-  sides.addColorStop(0.3, 'rgba(0,0,0,1)')
-  sides.addColorStop(0.78, 'rgba(0,0,0,1)')
-  sides.addColorStop(1, 'rgba(0,0,0,0)')
-  octx.fillStyle = sides
-  octx.fillRect(0, 0, pw, ph)
-  const top = octx.createLinearGradient(0, 0, 0, ph)
-  top.addColorStop(0, 'rgba(0,0,0,0)')
-  top.addColorStop(0.28, 'rgba(0,0,0,1)')
-  octx.fillStyle = top
-  octx.fillRect(0, 0, pw, ph)
-  ctx.drawImage(off, px, py)
-
-  text(ctx, 'Carnegie Mellon', PAD, 170, '600 48px "Source Serif 4", serif', '#fff')
-  text(ctx, 'University Africa', PAD, 226, '600 48px "Source Serif 4", serif', '#fff')
-  text(ctx, 'STUDENT GUILD ELECTIONS 2026', PAD, 290, '700 22px "Open Sans", sans-serif', 'rgba(255,255,255,0.8)', 6)
-
-  text(ctx, 'RUNNING FOR', PAD, 830, '700 24px "Open Sans", sans-serif', 'rgba(255,255,255,0.8)', 7)
-  text(ctx, 'Communications', PAD, 920, '800 84px "Open Sans", sans-serif', '#fff', -2)
-  text(ctx, 'Minister', PAD, 1005, '800 84px "Open Sans", sans-serif', '#fff', -2)
-
-  // White lower panel
   ctx.fillStyle = '#fff'
-  ctx.fillRect(0, 1180, W, H - 1180)
+  ctx.fillRect(0, 0, W, H)
+  ctx.fillStyle = RED
+  ctx.fillRect(0, 0, W, 14)
+
+  // Header
+  text(ctx, 'Carnegie Mellon University Africa', PAD, 170, '600 42px "Source Serif 4", serif', RED)
+  text(ctx, 'STUDENT GUILD ELECTIONS 2026', PAD, 222, '700 22px "Open Sans", sans-serif', SOFT, 6)
+
+  // Portrait
+  const pw = 560
+  const ph = 700
+  drawArchPhoto(ctx, photo, (W - pw) / 2, 290, pw, ph)
+
+  // Ballot card
+  const cardX = PAD
+  const cardY = 1060
+  const cardW = W - PAD * 2
+  const cardH = 330
+  ctx.fillStyle = '#fff'
+  ctx.fillRect(cardX, cardY - 40, cardW, cardH + 40)
+  ctx.strokeStyle = INK
+  ctx.lineWidth = 3
+  ctx.strokeRect(cardX, cardY, cardW, cardH)
   ctx.fillStyle = INK
-  ctx.fillRect(PAD, 1146, 150, 68)
-  text(ctx, 'VOTE', PAD + 28, 1192, '800 32px "Open Sans", sans-serif', '#fff', 6)
+  ctx.fillRect(cardX, cardY, cardW, 70)
+  text(ctx, 'BALLOT', cardX + 34, cardY + 46, '800 24px "Open Sans", sans-serif', '#fff', 8)
+  ctx.textAlign = 'right'
+  text(ctx, 'COMMUNICATIONS MINISTER', cardX + cardW - 34, cardY + 46, '700 22px "Open Sans", sans-serif', '#fff', 4)
+  ctx.textAlign = 'left'
 
-  text(ctx, CANDIDATE.name, PAD, 1300, '800 62px "Open Sans", sans-serif', INK, -1.5)
-  text(ctx, CANDIDATE.tagline, PAD, 1356, 'italic 400 40px "Source Serif 4", serif', RED)
+  drawTick(ctx, cardX + 40, cardY + 120, 96)
+  text(ctx, 'Abdoulaye Zakaria', cardX + 170, cardY + 158, '800 54px "Open Sans", sans-serif', INK, -1)
+  text(ctx, 'Djerou', cardX + 170, cardY + 218, '800 54px "Open Sans", sans-serif', INK, -1)
+  text(ctx, CANDIDATE.tagline, cardX + 170, cardY + 280, 'italic 400 34px "Source Serif 4", serif', RED)
 
-  // Countdown to voting day: days / hours / minutes
+  // Countdown
   if (voting) {
-    text(ctx, 'Voting is open today', PAD, 1520, '800 72px "Open Sans", sans-serif', RED, -1.5)
+    ctx.textAlign = 'center'
+    text(ctx, 'Voting is open today', W / 2, 1530, '800 64px "Open Sans", sans-serif', RED, -1)
+    ctx.textAlign = 'left'
   } else {
     const units = [
-      [timeLeft.days, timeLeft.days === 1 ? 'DAY' : 'DAYS'],
-      [timeLeft.hours, timeLeft.hours === 1 ? 'HOUR' : 'HOURS'],
-      [timeLeft.minutes, 'MINUTES'],
+      [timeLeft.days, timeLeft.days === 1 ? 'day' : 'days'],
+      [timeLeft.hours, timeLeft.hours === 1 ? 'hour' : 'hours'],
+      [timeLeft.minutes, 'min'],
     ]
-    text(ctx, 'VOTING DAY · 14 NOVEMBER', PAD, 1440, '700 24px "Open Sans", sans-serif', '#555', 6)
     const colW = (W - PAD * 2) / 3
     units.forEach(([value, label], i) => {
       const x = PAD + i * colW
-      ctx.fillStyle = i === 0 ? RED : INK
-      ctx.fillRect(x, 1466, colW - 28, 6)
-      text(ctx, String(value).padStart(2, '0'), x - 4, 1580, '800 110px "Open Sans", sans-serif', INK, -4)
-      text(ctx, label, x, 1620, '700 22px "Open Sans", sans-serif', RED, 6)
+      text(ctx, String(value).padStart(2, '0'), x, 1560, '800 104px "Open Sans", sans-serif', INK, -4)
+      ctx.font = '800 104px "Open Sans", sans-serif'
+      ctx.letterSpacing = '-4px'
+      const w = ctx.measureText(String(value).padStart(2, '0')).width
+      ctx.letterSpacing = '0px'
+      text(ctx, label, x + w + 10, 1560, '600 30px "Open Sans", sans-serif', SOFT)
     })
+    text(ctx, 'until voting opens on Saturday 14 November', PAD, 1620, '400 30px "Open Sans", sans-serif', SOFT)
   }
 
-  // Commitments
-  const items = ['Weekly Guild updates', 'Student spotlights', 'Every voice heard']
-  ctx.strokeStyle = '#e6e2dc'
-  ctx.lineWidth = 2
-  items.forEach((item, i) => {
-    const y = 1668 + i * 40
-    text(ctx, `0${i + 1}`, PAD, y + 26, '800 20px "Open Sans", sans-serif', RED)
-    text(ctx, item, PAD + 46, y + 27, '700 28px "Open Sans", sans-serif', INK)
-  })
+  // Footer
+  ctx.fillStyle = LINE
+  ctx.fillRect(PAD, 1680, W - PAD * 2, 2)
+  text(ctx, 'VOTE SAT 14 NOV', PAD, 1752, '800 30px "Open Sans", sans-serif', INK, 4)
   ctx.textAlign = 'right'
-  text(ctx, CANDIDATE.hashtag, W - PAD, 1748, '800 40px "Open Sans", sans-serif', RED)
+  text(ctx, CANDIDATE.hashtag, W - PAD, 1752, '800 38px "Open Sans", sans-serif', RED)
   ctx.textAlign = 'left'
 
-  drawPlaid(ctx, H - 36, 36)
+  ctx.fillStyle = RED
+  ctx.fillRect(0, H - 14, W, 14)
 
   return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'))
 }

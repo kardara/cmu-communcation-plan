@@ -27,7 +27,7 @@ const WEEK = [
 
 const STEPS = [
   ['Fill the form', 'Three minutes: your program, class, interests and a few words about you.'],
-  ['We prepare your feature', 'A post for each platform, drafted with the help of Claude. You approve it first.'],
+  ['We prepare your feature', 'A short post for each platform, written with you. You approve it before it goes out.'],
   ['Record your project', 'Optional. Built something? We book a slot and record a short demo together.'],
   ['Published on the weekend', 'Instagram, LinkedIn, WhatsApp and X, on the same day.'],
 ]

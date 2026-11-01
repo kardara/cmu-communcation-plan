@@ -39,33 +39,28 @@ arrives at unpredictable times, and it is not always clear who to ask. My platfo
 - **An open suggestion box,** with a monthly "You asked, we answered" post.
 - **Response promise:** messages to Communications are answered within 48 hours on weekdays.
 
-## 3. How the Student Spotlight runs (automated with Claude)
+## 3. How the Student Spotlight runs
 
 ```
-Google Form ──► Google Sheet ──► Claude drafts posts ──► Student approves ──► Scheduled for the weekend
- (3 minutes)    (all responses)   (one per platform)      (by email)          (Sat 10:00 / Sun 10:00)
+Google Form ──► Google Sheet ──► Draft the posts ──► Student approves ──► Scheduled for the weekend
+ (3 minutes)    (all responses)   (one per platform)   (by email)          (Sat 10:00 / Sun 10:00)
 ```
 
 1. **Collect:** the form (`scripts/create-spotlight-form.gs`) asks for name, Andrew email, program,
    class, country, interests, a short bio, an optional project, an optional photo link, social handles and consent.
 2. **Pick:** every Wednesday, choose Saturday's student and Sunday's project from the sheet,
    rotating program, class and country.
-3. **Draft:** Claude turns the form answers into a post for each platform, following the brief below.
+3. **Draft:** write a post for each platform from the form answers, using the template below.
 4. **Approve:** send the draft to the student by Thursday, and publish only after their OK.
 5. **Record (projects):** a 15-minute recording slot, booked through the booking link on the site.
 6. **Publish:** schedule everything for the weekend, and reuse it in Monday's update ("Meet last week's spotlight").
 
-**Phase 1 (now):** form + sheet, with drafts made by pasting a response into Claude using the brief below.
-**Phase 2 (after election):** a Google Sheets button that sends a response to the Claude API and
-writes the drafts back into the sheet, ready for review.
-
-### Drafting brief for Claude
-> You are drafting a Student of the Week post for the CMU-Africa Student Guild.
-> Using the form response below, write: (1) an Instagram caption (≤ 120 words, warm, 3 to 5 hashtags
-> including #CMUAfrica #StudentOfTheWeek), (2) a LinkedIn post (≤ 150 words, professional, tag-ready),
-> (3) a WhatsApp message (≤ 60 words). Use only facts from the response; do not invent achievements.
-> Mention program, class and country. End with "Want to be featured? [form link]".
-> Response: …
+### Post template
+- **Instagram:** up to 120 words, warm, 3 to 5 hashtags including #CMUAfrica #StudentOfTheWeek.
+- **LinkedIn:** up to 150 words, professional, tagging the student.
+- **WhatsApp:** up to 60 words.
+- Use only facts from the form, mention program, class and country, and end with
+  "Want to be featured? [form link]".
 
 ## 4. Campaign timeline (1 to 14 November)
 

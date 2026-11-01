@@ -41,6 +41,36 @@ const DIRECTORY = [
   ['Announcements and getting featured', 'Communications'],
 ]
 
+// A link button; when its URL isn't set yet, clicking shows "Coming soon" instead
+function LinkButton({ href, className, children }) {
+  const [soon, setSoon] = useState(false)
+  useEffect(() => {
+    if (!soon) return
+    const id = setTimeout(() => setSoon(false), 2500)
+    return () => clearTimeout(id)
+  }, [soon])
+
+  if (href) {
+    return (
+      <a className={className} href={href} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    )
+  }
+  return (
+    <>
+      <button type="button" className={className} onClick={() => setSoon(true)}>
+        {children}
+      </button>
+      {soon && (
+        <p className="toast" role="status">
+          Coming soon. Check back after the launch!
+        </p>
+      )}
+    </>
+  )
+}
+
 function Tick() {
   return (
     <svg className="tick" viewBox="0 0 40 40" aria-hidden="true">
@@ -161,6 +191,7 @@ export default function App() {
           </p>
 
           <div className="counter" aria-live="polite">
+            <p className="counter-title">{voting ? 'Voting day is here' : 'Countdown to voting day'}</p>
             {voting ? (
               <p className="counter-open">Voting is open today</p>
             ) : (
@@ -173,7 +204,7 @@ export default function App() {
                 ))}
               </div>
             )}
-            <p className="counter-note">Voting day · Saturday 14 November</p>
+            <p className="counter-note">CMU-Africa Student Guild elections open on Saturday 14 November</p>
           </div>
 
           <div className="actions">
@@ -236,14 +267,12 @@ export default function App() {
             something? We’ll record it together.
           </p>
           <div className="actions">
-            <a className="btn btn-red" href={SPOTLIGHT_FORM_URL} target="_blank" rel="noreferrer">
+            <LinkButton className="btn btn-red" href={SPOTLIGHT_FORM_URL}>
               Get featured
-            </a>
-            {BOOKING_URL && (
-              <a className="btn btn-line" href={BOOKING_URL} target="_blank" rel="noreferrer">
-                Book a recording
-              </a>
-            )}
+            </LinkButton>
+            <LinkButton className="btn btn-line" href={BOOKING_URL}>
+              Book a recording
+            </LinkButton>
           </div>
         </div>
         <ol className="steps">

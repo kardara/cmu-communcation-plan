@@ -175,6 +175,15 @@ h2 {
   margin-top: 36px;
 }
 
+.counter-title {
+  margin-bottom: 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
 .counter-units {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -308,6 +317,31 @@ h2 {
 .hero-visual .ballot {
   width: min(100%, 380px);
   margin-top: -2px;
+}
+
+/* ---------- Coming soon toast ---------- */
+.toast {
+  position: fixed;
+  z-index: 50;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  max-width: calc(100vw - 32px);
+  padding: 14px 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--ink);
+  border-left: 4px solid var(--red);
+  box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.5);
+  animation: toast-in 0.2s ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
 }
 
 /* ---------- Remind me ---------- */

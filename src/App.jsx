@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react'
-import { BOOKING_URL, CANDIDATE, SPOTLIGHT_FORM_URL, VOTE_START, daysToVote } from './config.js'
+import {
+  BOOKING_URL,
+  CANDIDATE,
+  GUIDE_URL,
+  MAGAZINE_NAME,
+  MAGAZINE_SUBMIT_URL,
+  SPOTLIGHT_FORM_URL,
+  VOTE_START,
+  daysToVote,
+} from './config.js'
 import { downloadIcs, googleCalendarUrl } from './calendar.js'
 import { shareStatusImage } from './statusImage.js'
 
@@ -9,12 +18,12 @@ const COMMITMENTS = [
     text: 'Every Monday, one clear post with the week’s events, deadlines and Guild decisions. Same day, same format, on every channel.',
   },
   {
-    title: 'Student spotlights',
-    text: 'Every weekend, a student from our community in the spotlight: a Student of the Week on Saturday, a project showcase on Sunday.',
+    title: 'Student stories',
+    text: 'A Student of the Week every Saturday, a project showcase every Sunday, and a monthly student magazine about the people and ideas on our campus.',
   },
   {
     title: 'Every voice heard',
-    text: 'One link with every contact and form, a clear guide to who handles what, and suggestions answered every month.',
+    text: 'One Student Guide with every process, contact and form: how to book a room, who to ask for what, and suggestions answered every month.',
   },
 ]
 
@@ -32,13 +41,38 @@ const STEPS = [
   ['Published on the weekend', 'Instagram, LinkedIn, WhatsApp and X, on the same day.'],
 ]
 
+const MAGAZINE_INSIDE = [
+  ['Cover story', 'One student, team or idea that shaped the month.'],
+  ['Student of the Month', 'Chosen from the weekly spotlights.'],
+  ['Research & projects', 'What our classmates are building and discovering.'],
+  ['Clubs & events', 'The month in photos, and what’s coming next.'],
+  ['Careers & alumni', 'Internships, jobs and advice from those who came before.'],
+  ['Voices', 'Opinions, culture and creative work from any student.'],
+]
+
+const MAGAZINE_STEPS = [
+  ['1st to 10th', 'Open call', 'Anyone can pitch a story, photo or idea.'],
+  ['11th to 20th', 'Edit & design', 'A small volunteer team writes, edits and lays it out.'],
+  ['Last Friday', 'Published', 'Online and as a PDF, shared on every channel.'],
+]
+
+// Real questions students ask, grouped the way the Student Guide will answer them
+const GUIDE = [
+  ['Spaces', 'How do I book a conference or meeting room?'],
+  ['Tech', 'Who helps with my Andrew account, Wi-Fi or laptop?'],
+  ['Academics', 'Where do I get a student letter or academic advice?'],
+  ['Wellbeing', 'Who can I talk to when things feel heavy?'],
+  ['Clubs', 'How does my club plan an event or request funding?'],
+  ['Guild', 'Which minister handles my concern, and how do I reach them?'],
+]
+
 const DIRECTORY = [
   ['Courses, research and academic concerns', 'Academic Affairs & Research'],
   ['Events, clubs and campus life', 'Social Affairs'],
   ['Funding for student initiatives', 'Finance'],
   ['Wellbeing, sports and safety', 'Sports & Wellness'],
   ['Exchanges and international opportunities', 'International Affairs'],
-  ['Announcements and getting featured', 'Communications'],
+  ['Announcements, the magazine and getting featured', 'Communications'],
 ]
 
 // A link button; when its URL isn't set yet, clicking shows "Coming soon" instead
@@ -75,7 +109,8 @@ const NAV = [
   ['vision', 'Vision'],
   ['commitments', 'Commitments'],
   ['spotlight', 'Spotlight'],
-  ['where', 'Where to go'],
+  ['magazine', 'Magazine'],
+  ['guide', 'Student Guide'],
 ]
 
 // Sticky nav: section links (current one highlighted), a vote button, and a menu on phones
@@ -332,17 +367,94 @@ export default function App() {
         </ol>
       </section>
 
-      <section id="where" className="wrap section where">
-        <p className="label">Know where to go</p>
-        <h2>One link. Every answer.</h2>
-        <ul className="dir">
-          {DIRECTORY.map(([need, who]) => (
-            <li key={need}>
-              <span>{need}</span>
-              <strong>{who}</strong>
-            </li>
-          ))}
-        </ul>
+      <section id="magazine" className="magazine">
+        <div className="wrap section">
+          <div className="mag-head">
+            <div>
+              <p className="label">New · Monthly student magazine</p>
+              <h2>{MAGAZINE_NAME}</h2>
+              <p className="body">
+                One magazine a month, made by students for students: the stories, projects and people behind
+                CMU-Africa, in one beautiful read.
+              </p>
+              <div className="actions">
+                <LinkButton className="btn btn-red" href={MAGAZINE_SUBMIT_URL}>
+                  Write for the magazine
+                </LinkButton>
+              </div>
+            </div>
+            <div className="mag-cover" aria-hidden="true">
+              <span className="mag-cover-name">{MAGAZINE_NAME}</span>
+              <span className="mag-cover-issue">Issue 01</span>
+              <span className="mag-cover-title">Every student has a story.</span>
+            </div>
+          </div>
+
+          <div className="mag-grid">
+            <div>
+              <p className="mag-sub">Inside every issue</p>
+              <ul className="mag-inside">
+                {MAGAZINE_INSIDE.map(([title, text]) => (
+                  <li key={title}>
+                    <strong>{title}</strong>
+                    <span>{text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="mag-sub">How each issue comes together</p>
+              <ol className="mag-steps">
+                {MAGAZINE_STEPS.map(([when, title, text]) => (
+                  <li key={title}>
+                    <span>{when}</span>
+                    <strong>{title}</strong>
+                    <p>{text}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="guide" className="wrap section guide">
+        <p className="label">The Student Guide</p>
+        <h2>One guide. Every answer.</h2>
+        <p className="body">
+          No more asking around in group chats. One place with the steps, forms and contacts for the things students
+          need most, checked with each office and kept up to date.
+        </p>
+
+        <div className="guide-grid">
+          <div>
+            <p className="mag-sub">Questions it answers</p>
+            <ul className="faq">
+              {GUIDE.map(([tag, q]) => (
+                <li key={q}>
+                  <span>{tag}</span>
+                  {q}
+                </li>
+              ))}
+            </ul>
+            <div className="actions">
+              <LinkButton className="btn btn-line" href={GUIDE_URL}>
+                Open the Student Guide
+              </LinkButton>
+            </div>
+          </div>
+          <div>
+            <p className="mag-sub">Who handles what in the Guild</p>
+            <ul className="dir">
+              {DIRECTORY.map(([need, who]) => (
+                <li key={need}>
+                  <span>{need}</span>
+                  <strong>{who}</strong>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       </section>
 
       <section id="vote" className="final">

@@ -62,7 +62,50 @@ Google Form ──► Google Sheet ──► Draft the posts ──► Student a
 - Use only facts from the form, mention program, class and country, and end with
   "Want to be featured? [form link]".
 
-## 4. Campaign timeline (1 to 14 November)
+## 3b. The Plaid Monthly (student magazine)
+
+**Is it the Communications Minister's job?** Yes. The role produces the Guild's publications, and a
+magazine is the Guild's main publication. The minister acts as **editor-in-chief**: owns the
+schedule, quality and publishing, while the content comes from students, ministers and clubs.
+
+**Team (volunteers, about 5 people):** editor-in-chief (Communications Minister), 1 to 2 writers/editors,
+1 designer, 1 photographer, and one contact per program (MSIT, MS ECE, MS EAI) to find stories.
+
+**Inside every issue (8 to 12 pages):** cover story · Student of the Month (from the weekly spotlights) ·
+research & projects · clubs & events in photos · careers & alumni · voices (opinion, culture, creative work).
+
+**Monthly cycle:**
+
+| When | What |
+|---|---|
+| 1st to 10th | Open call: anyone pitches a story, photo or idea (submission form) |
+| 11th to 15th | Write and edit; each piece approved by the people featured |
+| 16th to 20th | Design in Canva using one fixed template, so every issue looks consistent |
+| 21st to last Thursday | Final check with the Guild President |
+| Last Friday | Publish: web page + PDF, shared on every channel and in the Monday update |
+
+**Low-cost tools:** Google Forms for submissions, a shared Drive folder per issue, a Canva template,
+and a simple web page or PDF for each issue (no printing needed).
+
+**First issue:** the month after the election, a "Meet your Guild" issue, so students know every minister.
+
+## 3c. The Student Guide (one place for every answer)
+
+A single, searchable page (Notion or Google Sites) that answers the questions students ask in group chats:
+
+- **Spaces:** how to book a conference or meeting room
+- **Tech:** Andrew account, Wi-Fi, laptop help (IT Help Center)
+- **Academics:** student letters, academic advising
+- **Wellbeing:** counselling and wellness support
+- **Clubs:** planning events, requesting funding
+- **Guild:** which minister handles what, and how to reach them
+
+**How to build it:** in the first two weeks, meet each office (Student Services, IT, Academic Advising)
+and each minister, and write each answer as 3 to 5 clear steps with the right contact. Every answer is
+checked by the office it comes from and has a "last checked" date. Review the whole guide at the start of
+each semester, and pin the link in every group, the Instagram bio and the Monday update.
+
+ (1 to 14 November)
 
 | When | What |
 |---|---|
@@ -79,10 +122,10 @@ Google Form ──► Google Sheet ──► Draft the posts ──► Student a
 answer every message, and log good ideas from students into the plan.
 
 ## 5. First 30 days in office
-- **Week 1:** launch the one-link page and the "who handles what" guide; agree the Friday-5 PM submission rule with all ministers.
+- **Week 1:** start the Student Guide (meet each office) and publish the "who handles what" list; agree the Friday-5 PM submission rule with all ministers.
 - **Week 2:** first Monday update; first official Student of the Week.
 - **Week 3:** open the suggestion box; set up the booking calendar for project recordings.
-- **Week 4:** first "You asked, we answered" post; share simple numbers (reach, features, responses).
+- **Week 4:** first "You asked, we answered" post; publish the Student Guide; open the call for Issue 01 of the magazine.
 
 ## 6. How we'll measure it
 - 52 Monday updates a year, never skipped.

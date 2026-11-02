@@ -728,10 +728,6 @@ section[id] {
 }
 
 /* ---------- Directory ---------- */
-.where {
-  padding-top: 0;
-}
-
 .dir {
   margin-top: 36px;
   border-top: 2px solid var(--ink);
@@ -756,6 +752,155 @@ section[id] {
 
 .dir li:last-child strong {
   color: var(--red);
+}
+
+/* ---------- Magazine ---------- */
+.magazine {
+  background: #f6f4f1;
+}
+
+.mag-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: clamp(40px, 7vw, 112px);
+  align-items: center;
+}
+
+.mag-cover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 3 / 4;
+  padding: 26px 24px;
+  color: #fff;
+  background:
+    linear-gradient(180deg, rgba(13, 19, 36, 0.15) 0%, rgba(13, 19, 36, 0.85) 100%),
+    var(--tartan);
+  box-shadow: 18px 18px 0 -2px #f6f4f1, 18px 18px 0 0 var(--red), 0 30px 60px -30px rgba(0, 0, 0, 0.5);
+  transform: rotate(2deg);
+}
+
+.mag-cover-name {
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.mag-cover-issue {
+  margin-top: 8px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.mag-cover-title {
+  margin-top: auto;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.mag-grid,
+.guide-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(40px, 6vw, 96px);
+  margin-top: clamp(48px, 6vw, 72px);
+}
+
+.mag-sub {
+  padding-bottom: 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--ink);
+}
+
+.mag-inside li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 0;
+  border-bottom: 1px solid #dcd8d2;
+}
+
+.mag-inside strong {
+  font-size: 1.02rem;
+}
+
+.mag-inside span {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.mag-steps li {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  grid-template-areas:
+    'when title'
+    'when text';
+  column-gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid #dcd8d2;
+}
+
+.mag-steps span {
+  grid-area: when;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--red);
+}
+
+.mag-steps strong {
+  grid-area: title;
+  font-size: 1.05rem;
+}
+
+.mag-steps p {
+  grid-area: text;
+  margin-top: 4px;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+/* ---------- Student Guide ---------- */
+.faq li {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 15px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--line);
+}
+
+.faq span {
+  flex-shrink: 0;
+  width: 84px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+.guide .dir {
+  margin-top: 0;
+  border-top: none;
+}
+
+.guide .dir li {
+  padding: 15px 0;
+}
+
+.guide .dir span {
+  font-size: 0.95rem;
 }
 
 /* ---------- Final call ---------- */
@@ -859,8 +1004,15 @@ section[id] {
     padding: 40px 24px;
   }
   .commitments,
-  .spot {
+  .spot,
+  .mag-head,
+  .mag-grid,
+  .guide-grid {
     grid-template-columns: 1fr;
+  }
+  .mag-cover {
+    width: min(260px, 70%);
+    grid-row: 1;
   }
   .rhythm ol {
     grid-template-columns: 1fr 1fr;

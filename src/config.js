@@ -9,6 +9,13 @@ export const SPOTLIGHT_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeZO
 // Booking link for project-showcase recordings (e.g. a Google Calendar appointment schedule).
 export const BOOKING_URL = ''
 
+// Monthly student magazine: its name and the link where students submit stories.
+export const MAGAZINE_NAME = 'The Plaid Monthly'
+export const MAGAZINE_SUBMIT_URL = ''
+
+// The Student Guide (e.g. a Notion or Google Sites page). Empty shows "Coming soon".
+export const GUIDE_URL = ''
+
 export const CANDIDATE = {
   name: 'Abdoulaye Zakaria Djerou',
   role: 'Communications Minister',

@@ -61,42 +61,39 @@ def page():
   .sheet {{ position: relative; width: 210mm; height: 297mm; overflow: hidden; }}
   .tartan {{ background: url('../public/tartan.svg') repeat 0 0 / 24mm 24mm; }}
 
-  .band {{ height: 70mm; padding: 15mm 16mm 0; color: #fff; }}
-  .school {{ font-family: 'Source Serif 4', Georgia, serif; font-weight: 600; font-size: 16pt; }}
-  .event {{ margin-top: 2mm; font-size: 8.5pt; font-weight: 700; letter-spacing: 0.28em; opacity: 0.85; }}
-  .role {{
-    display: inline-block; margin-top: 8mm; padding: 2mm 4mm;
-    background: #c41230; font-size: 9pt; font-weight: 800; letter-spacing: 0.2em;
+  /* Top half: text on the left, the photo full-bleed on the right */
+  .top {{ position: relative; height: 150mm; }}
+  .top-strip {{ position: absolute; left: 0; right: 0; top: 0; height: 7mm; }}
+  .photo {{ position: absolute; top: 7mm; right: 0; bottom: 0; width: 98mm; overflow: hidden; background: #a6192e; }}
+  .photo img {{ width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; display: block; }}
+  .photo-caption {{
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 18mm 7mm 6mm; color: #fff;
+    background: linear-gradient(to top, rgba(10, 12, 24, 0.88), rgba(10, 12, 24, 0));
   }}
+  .photo-caption strong {{ display: block; font-size: 15pt; font-weight: 800; line-height: 1.2; }}
+  .photo-caption span {{ display: block; margin-top: 1mm; font-size: 8pt; font-weight: 700; letter-spacing: 0.2em; opacity: 0.9; }}
 
-  /* Tall arch portrait in a white frame, with an offset red outline behind it */
-  .frame {{ position: absolute; top: 14mm; right: 18mm; width: 82mm; height: 122mm; }}
-  .frame::before {{
-    content: ''; position: absolute; inset: 0; transform: translate(4.5mm, 4.5mm);
-    border: 0.8mm solid #c41230; border-radius: 41mm 41mm 0 0;
-  }}
-  .portrait {{
-    position: absolute; inset: 0; border: 2.6mm solid #fff; border-radius: 41mm 41mm 0 0;
-    overflow: hidden; background: #a6192e; box-shadow: 0 1.5mm 5mm rgba(0, 0, 0, 0.18);
-  }}
-  .portrait img {{
-    width: 100%; height: 100%; object-fit: cover; object-position: 50% 15%; display: block;
-    transform: scale(1.14); transform-origin: 50% 20%;
-  }}
+  .intro {{ position: absolute; top: 7mm; left: 16mm; width: 82mm; bottom: 0; display: flex; flex-direction: column; }}
+  .school {{ margin-top: 11mm; font-family: 'Source Serif 4', Georgia, serif; font-weight: 600; font-size: 13pt; }}
+  .event {{ margin-top: 1.5mm; font-size: 7.5pt; font-weight: 700; letter-spacing: 0.24em; color: #666; }}
 
-  .main {{ padding: 9mm 16mm 0; }}
-  h1 {{ width: 96mm; font-size: 43pt; font-weight: 800; line-height: 1; letter-spacing: -0.025em; }}
+  .position {{ margin-top: 10mm; border-left: 1.6mm solid #c41230; padding-left: 4mm; }}
+  .position small {{ display: block; font-size: 8pt; font-weight: 700; letter-spacing: 0.24em; color: #666; }}
+  .position strong {{ display: block; margin-top: 1mm; font-size: 23pt; font-weight: 800; line-height: 1.05; color: #c41230; letter-spacing: -0.01em; }}
+
+  h1 {{ margin-top: auto; font-size: 37pt; font-weight: 800; line-height: 1; letter-spacing: -0.025em; }}
   h1 .red {{ color: #c41230; }}
-  .pitch {{ margin-top: 5mm; width: 88mm; font-size: 12pt; line-height: 1.45; color: #333; }}
+  .pitch {{ margin-top: 4.5mm; font-size: 11pt; line-height: 1.45; color: #333; }}
   .pitch strong {{ color: #111; }}
 
-  .commitments {{ list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 7mm; margin-top: 11mm; }}
+  .main {{ padding: 0 16mm; }}
+  .commitments {{ list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 7mm; margin-top: 9mm; }}
   .commitments li {{ border-top: 0.6mm solid #111; padding-top: 3.5mm; }}
   .num {{ font-size: 20pt; font-weight: 800; color: #c41230; line-height: 1; }}
   .commitments h3 {{ margin-top: 2mm; font-size: 11pt; font-weight: 800; }}
   .commitments p {{ margin-top: 1.5mm; font-size: 9pt; line-height: 1.45; color: #555; }}
 
-  .bottom {{ display: grid; grid-template-columns: 1fr 58mm; gap: 8mm; align-items: stretch; margin: 9mm 16mm 0; }}
+  .bottom {{ display: grid; grid-template-columns: 1fr 58mm; gap: 8mm; align-items: stretch; margin: 8mm 16mm 0; }}
   .ballot {{ border: 0.6mm solid #111; display: flex; flex-direction: column; }}
   .ballot-head {{
     display: flex; justify-content: space-between; background: #111; color: #fff;
@@ -117,7 +114,7 @@ def page():
   .scan span {{ display: block; margin-top: 0.6mm; font-size: 8.5pt; color: #555; }}
 
   .foot {{
-    margin: 6mm 16mm 0;
+    margin: 5mm 16mm 0;
     display: flex; justify-content: space-between; align-items: baseline;
     border-top: 0.3mm solid #e2dfda; padding-top: 4mm; font-size: 9pt; color: #555;
   }}
@@ -127,16 +124,28 @@ def page():
 </head>
 <body>
 <div class="sheet">
-  <header class="band tartan">
-    <p class="school">Carnegie Mellon University Africa</p>
-    <p class="event">STUDENT GUILD ELECTIONS 2026</p>
-    <p class="role">COMMUNICATIONS MINISTER</p>
-  </header>
-  <div class="frame"><div class="portrait"><img src="../public/candidate.jpg" alt=""></div></div>
+  <section class="top">
+    <div class="top-strip tartan"></div>
+    <div class="intro">
+      <p class="school">Carnegie Mellon University Africa</p>
+      <p class="event">STUDENT GUILD ELECTIONS 2026</p>
+      <div class="position">
+        <small>CANDIDATE FOR</small>
+        <strong>Communications<br>Minister</strong>
+      </div>
+      <h1>Clear.<br>Consistent.<br><span class="red">Connected.</span></h1>
+      <p class="pitch">A Guild that speaks to every student, every week: on time, in one place, for everyone.</p>
+    </div>
+    <div class="photo">
+      <img src="../public/candidate.jpg" alt="">
+      <div class="photo-caption">
+        <strong>Abdoulaye Zakaria Djerou</strong>
+        <span>COMMUNICATIONS MINISTER</span>
+      </div>
+    </div>
+  </section>
 
   <main class="main">
-    <h1>Clear.<br>Consistent.<br><span class="red">Connected.</span></h1>
-    <p class="pitch">Vote <strong>Abdoulaye Zakaria Djerou</strong> for Communications Minister: a Guild that speaks to every student, every week.</p>
     <ul class="commitments">{commitments}</ul>
   </main>
 
